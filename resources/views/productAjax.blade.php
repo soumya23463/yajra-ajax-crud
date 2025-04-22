@@ -46,12 +46,14 @@
                             <label for="name" class="col-sm-2 control-label">Name</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" value="" maxlength="50" required="">
+                                <span class="text-danger" id="nameError"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Details</label>
                             <div class="col-sm-12">
                                 <textarea id="detail" name="detail" required="" placeholder="Enter Details" class="form-control"></textarea>
+                                <span class="text-danger" id="detailError"></span>
                             </div>
                         </div>
                         <div class="col-sm-offset-2 col-sm-10">
@@ -123,6 +125,32 @@
         $('#saveBtn').click(function (e) {
             e.preventDefault();
             $(this).html('Saving...');
+            var product_id = $('#product_id').val();
+
+             // Clear previous errors
+             if (product_id === "") {
+                $('#nameError').text('');
+                $('#detailError').text('');
+            }
+
+            let name = $('#name').val().trim();
+            let detail = $('#detail').val().trim();
+            let hasError = false;
+
+        if (name === '') {
+            $('#nameError').text('Name cannot be blank');
+            hasError = true;
+        }
+
+    if (detail === '') {
+        $('#detailError').text('Detail cannot be blank');
+        hasError = true;
+    }
+
+        if (hasError) {
+            $('#saveBtn').html('Save Changes');
+            return;
+        }
 
             var formData = $('#productForm').serialize();
             var product_id = $('#product_id').val();
