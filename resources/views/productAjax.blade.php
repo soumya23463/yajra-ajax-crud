@@ -97,14 +97,44 @@
         });
 
         /* Save button click */
-        $('#saveBtn').click(function (e) {
+        {{--  $('#saveBtn').click(function (e) {
             e.preventDefault();
             $(this).html('Sending..');
+
 
             $.ajax({
                 data: $('#productForm').serialize(),
                 url: "{{ route('products.store') }}",
                 type: "POST",
+                dataType: 'json',
+                success: function (data) {
+                    $('#productForm').trigger("reset");
+                    $('#ajaxModel').modal('hide');
+                    table.draw();
+                    $('#saveBtn').html('Save Changes');
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                    $('#saveBtn').html('Save Changes');
+                }
+            });
+        });  --}}
+
+        $('#saveBtn').click(function (e) {
+            e.preventDefault();
+            $(this).html('Saving...');
+
+            var formData = $('#productForm').serialize();
+            var product_id = $('#product_id').val();
+            var type = (product_id === "") ? "POST" : "PUT";
+            var ajaxUrl = (product_id === "")
+                ? "{{ route('products.store') }}"
+                : "/products/" + product_id;
+
+            $.ajax({
+                data: formData,
+                url: ajaxUrl,
+                type: type,
                 dataType: 'json',
                 success: function (data) {
                     $('#productForm').trigger("reset");
@@ -136,13 +166,9 @@
 
         /*------------------------------------------
 
-    --------------------------------------------
+        Delete Product Code
 
-    Delete Product Code
-
-    --------------------------------------------
-
-    --------------------------------------------*/
+       --------------------------------------------*/
 
     $('body').on('click', '.deleteProduct', function () {
         var product_id = $(this).data("id");
@@ -154,15 +180,10 @@
                 console.log(data);
                 {{--  table.draw();  --}}
             },
-
             error: function (data) {
-
                 console.log('Error:', data);
-
             }
-
         });
-
     });
 
     });

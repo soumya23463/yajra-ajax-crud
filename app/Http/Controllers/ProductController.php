@@ -21,17 +21,38 @@ class ProductController extends Controller
         }
         return view('productAjax');
     }
+    // public function store(Request $request)
+    // {
+    //     Product::updateOrCreate([
+    //                 'id' => $request->product_id
+    //             ],
+    //             [
+    //                 'name' => $request->name,
+    //                 'detail' => $request->detail
+    //             ]);
+    //     return response()->json(['success'=>'Product saved successfully.']);
+    // }
     public function store(Request $request)
-    {
-        Product::updateOrCreate([
-                    'id' => $request->product_id
-                ],
-                [
-                    'name' => $request->name,
-                    'detail' => $request->detail
-                ]);
-        return response()->json(['success'=>'Product saved successfully.']);
-    }
+        {
+            Product::create([
+                'name' => $request->name,
+                'detail' => $request->detail
+            ]);
+
+            return response()->json(['success' => 'Product created successfully.']);
+        }
+
+        public function update(Request $request, $id)
+        {
+            $product = Product::find($id);
+            $product->update([
+                'name' => $request->name,
+                'detail' => $request->detail
+            ]);
+
+            return response()->json(['success' => 'Product updated successfully.']);
+        }
+
 
     public function edit($id)
 
